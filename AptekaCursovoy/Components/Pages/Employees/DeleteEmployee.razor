@@ -1,0 +1,84 @@
+﻿@page "/DeleteEmployee/{id}"
+@inject EmployeesController employeeService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h1>Удалить сотрудника</h1>
+
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label>Id</label>
+                <label>@_employee.Id</label>
+            </div>
+            <div class="form-group">
+                <label>Имя</label>
+                <label>@_employee.Имя</label>
+            </div>
+            <div class="form-group">
+                <label>Фамилия</label>
+                <label>@_employee.Фамилия</label>
+            </div>
+            <div class="form-group">
+                <label>Должность</label>
+                <label>@_employee.Должность</label>
+            </div>
+            <div class="form-group">
+                <label>Дата Рождения</label>
+                <label>@_employee.ДатаРождения</label>
+            </div>
+            <div class="form-group">
+                <label>Адрес</label>
+                <label>@_employee.Адрес</label>
+            </div>
+            <div class="form-group">
+                <label>Телефон</label>
+                <label>@_employee.Телефон</label>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <label>@_employee.Email</label>
+            </div>
+            <div class="form-group">
+                <label>Зарплата</label>
+                <label>@_employee.Зарплата</label>
+            </div>
+            <div class="form-group">
+                <label>Фото</label>
+                <label>@_employee.Фото</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <input type="button" class="btn btn-danger" @onclick="@Delete" value="Удалить" />
+                    <input type="button" class="btn btn-danger" @onclick="@Cancel" value="Отмена" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Employee _employee = new Employee();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _employee = await Task.Run(() => employeeService.GetEmployeeAsync(Convert.ToInt32(Id)));
+    }
+    protected async void Delete()
+    {
+        await employeeService.DeleteEmployeeAsync(_employee);
+        NavigationManager.NavigateTo("Employees");
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Employees");
+    }
+
+}
